@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Reproducible Practices in Taming the Wild Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dewi Amaliah" />
+    <meta name="date" content="2022-02-24" />
+    <link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+    <script src="libs/anchor-sections/anchor-sections.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+class: center
+
+background-image:url(images/cover.png)
+background-size: cover
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Acknowledgment
+
+&lt;br&gt;
+&lt;br&gt;
+
+## This work is done in collaboration with:
+
+- Dianne Cook (Monash University)
+- Emi Tanaka (Monash University)
+- Nicholas Tierney (Telethon Kids Institute), and 
+- Kate Hyde (Monash University)
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Traits of Ideal Data
+
+&lt;br&gt; 
+
+### Data should satisfies 3R ([Kim, Ismay, Chunn, 2018](https://scholarworks.smith.edu/cgi/viewcontent.cgi?article=1044&amp;context=mth_facpubs)):
+
+1. **Rich** enough to answer meaningful questions;
+2. **Real** enough to ensure the existence of a context;
+3. **Realistic** enough to convey that pre-processing is often needed;
+
+--
+
+### On another side: 
+
+&gt; For learning and teaching of statistics/data science-purposes, or textbook's data, the prerequisite to analyze the data should ideally be minimum ([Cobb, 2015 in Kim, Ismay, Chunn, 2018](https://scholarworks.smith.edu/cgi/viewcontent.cgi?article=1044&amp;context=mth_facpubs)).
+
+---
+
+class: center
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Tame vs Wild Data
+
+.pull-left[
+
+### Wild data
+
+&lt;img src="images/wild.png" width="50%" /&gt;
+
+The 3rd R of ideal data.
+
+]
+
+.pull-right[
+
+### Tame data
+
+&lt;img src="images/tame.png" width="60%" /&gt;
+
+Minimum prerequisite.
+]
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# 🎯 The Goal
+
+&lt;br&gt;
+
+.center[
+## Dataset that is **rich**, **real**, **tidy**, **clean**.
+
+&lt;img src="images/arrow-down.png" width="15%" /&gt;
+
+## Tame data
+]
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Taming the Wild Data: Works to Do
+
+.left[
+**Data science pipeline** 
+([Wickham &amp; Grolemund, 2017](https://r4ds.had.co.nz/index.html#welcome))
+]
+
+.center[
+![wickham](images/data-science-explore.png)
+]
+
+--
+&lt;br&gt;
+.left[
+**Statistical value chain** 
+([van der Loo &amp; de Jonge, 2018](https://r4ds.had.co.nz/index.html#welcome))
+]
+
+.center[
+
+&lt;img src="images/svc.png" width="50%" /&gt;
+
+
+]
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# What is the Problem?
+
+&gt; Most of the time is spent for data preparation, yet it is the least enjoyable task.
+
+.center[
+.pull-left[
+&lt;img src="twr-slides_files/figure-html/task-1.png" width="80%" /&gt;
+]
+
+.pull-right[
+
+&lt;img src="twr-slides_files/figure-html/enjoy-1.png" width="80%" /&gt;
+
+]
+]
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Another Problem
+
+
+&lt;br&gt; 
+###"Data cleaning and preparation are often neglected or disorganized and decision made during these steps are often unreported." ([Huebner, Vach, le Cessie, 2016](https://www.sciencedirect.com/science/article/pii/S0022522315017948))
+
+--
+
+.center[
+
+&lt;img src="images/arrow-down.png" width="15%" /&gt;
+]
+
+--
+
+.center[**Lack of Reproducibility**]
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Case Study: `yowie`
+
+.left-code[
+
+&lt;img src="images/logo.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.right-plot[
+
+Stands for **Y**ears **o**f **W**ages to **I**nvestigate and **E**xplore
+
+&lt;style&gt;
+div.blue { background-color:#E8F8F5; border-radius: 5px; padding: 20px;}
+&lt;/style&gt;
+&lt;div class = "blue"&gt;
+
+An &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt; package contains longitudinal wages datasets and several demographic variables of the &lt;a href="https://www.nlsinfo.org/content/cohorts/nlsy79"&gt;National Longitudinal Survey of Youth 1979&lt;/a&gt; cohort. The period covered is 1979-2018.
+
+&lt;/div&gt;
+
+The aim is to provide longitudinal data that is suitable for learning and teaching longitudinal data
+with **reproducibility and transparency emphasized**.
+
+3 datasets in the package:
+
+- Demographic data of the NLSY79 cohort.
+- Longitudinal wages data of the NLSY79 cohort.
+- Longitudinal wages data of high school dropouts subset of the NLSY79 cohort (the refreshed version of Singer &amp; Willet's (2003); This data is only from 1979 - 1994) 
+]
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Why wages data from NLSY79?
+
+
+- NLSY79 covers various variable and has been used in research in various discipline (Pergamit at al., 2001).
+- The survey is carefully designed with high retention rates so it suitable for life course research (Pergamit et al. 2001; Cooksey 2017).
+- The data has been widely used in textbook, including in Singer and Willet (2003). It has been used in teaching of exploratory data analysis. This data is also used as example data in `brolgar` (Tierney, Cook &amp; Prvan, 2020)
+
+--
+
+**Variables included in the original data**
+
+&lt;style&gt;
+div.blue { background-color:#E8F8F5; border-radius: 5px; padding: 20px;}
+&lt;/style&gt;
+&lt;div class = "blue"&gt;
+The original data (Singer and Willet, 2003) covers the variables of ID of the data, wages, work experience, GED status, highest grade completed, dummy variable of whether the ID belongs to Black or Hispanic group, and the unemployment rate. 
+&lt;/div&gt;
+
+--
+
+**Variables included in the refreshed data**
+
+&lt;style&gt;
+div.blue { background-color:#E8F8F5; border-radius: 5px; padding: 20px;}
+&lt;/style&gt;
+&lt;div class = "blue"&gt;
+The same variables with the original data (except the unemployment rate) with some other variables to enrich the analysis (e.g., gender, year when start working) and to improve transparency (whether the data is imputed or not). 
+&lt;/div&gt;
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Getting the Data
+
+The data is publicly available in the [NLS Investigator website](https://www.nlsinfo.org/investigator/pages/search?s=NLSY79). 
+
+&lt;img src="images/nls-web.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+--
+😊 We can create a tagset which contains the variables name -&gt; 👍 for the reproducible workflow. 
+
+--
+
+🙁 Some variables in the original data are not explicitly available in the database -&gt; need 🕵 work.
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Tidy the Data
+
+The downloaded NLSY79 data is not tidy 
+--
+**-&gt;** The 3rd "R" in the criteria of ideal data. 
+
+--
+
+&lt;img src="images/raw-data.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Done by using `tidyverse` (Wickham, Averick, et al. 2019) to pivot longer the data, rename the variables, and change the data type with appropriate data type.
+
+--
+
+- The wages data frame is saved in `tsibble` (Wang, Cook, Hyndman, 2020), a data frame class that is suitable for temporal data. 
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# 🕵 On the Quest for `experience`
+
+
+
+
+.panelset[
+.panel[.panel-name[Problems]
+
+- Singer and Willet (2003) use `experience` as the time index. 
+
+- This variable is not explicitly available in the database **-&gt;** calculated variable.
+
+- There is no code or explicit explanation available in the book on how `experience` is calculated from the raw data.
+
+- The only explanation available is the length of time (in years) since entering the labor force, with 
+`\(t_0\)` for each subject starting on their first day at work.
+
+]
+
+.panel[.panel-name[Comparison]
+
+- Recreate the variable based on the definition available, calculated from the year of individual started working (available in the database).
+
+&lt;img src="twr-slides_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+
+🙅‍♂  Does not seems match.
+
+]
+
+.panel[.panel-name[Try it again]
+
+From [the topical guide of NLSY79 data](https://www.nlsinfo.org/content/cohorts/nlsy79/topical-guide/employment/work-experience) we find:
+
+&lt;img src="images/topical-guide.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+Finally, we calculated `experience` using `number of weeks worked since the last interview`. 
+]
+
+]
+
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Impute Anomalies
+
+.panelset[
+.panel[.panel-name[Summary]
+
+&lt;img src="images/summary.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+⚠️ Extremely high wages observed. 
+
+⚠️ Some IDs, for example ID=39, only experience high wages in 1 survey year 🤔
+
+]
+
+.panel[.panel-name[Sample]
+
+&lt;img src="images/sample.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+- ID 11041, 11146, 10262 only participated in few years of survey.
+- ID 8296, 9962, possibly have error in their wage.
+
+]
+
+.panel[.panel-name[Treat the anomalies]
+
+&lt;br&gt;
+- Using robust linear model (`rlm` function from `MASS` package (Venables and Ripley 2002)) with `wage` and `year` as response and predictor, respectively.
+
+- We build the model for each individual using nest and map function from `tidyr` (Wickham 2020) and `purrr` (Henry and Wickham 2020). 
+
+- Each observation has weight -&gt; this is used as a threshold to decide whether the observation is anomalies or not. 
+
+- A thereshold of 0.12 was chosen to maintain the variability of the data.
+
+]
+
+
+.panel[.panel-name[The result]
+
+&lt;img src="images/compare.png" width="45%" style="display: block; margin: auto;" /&gt;
+
+The extreme spikes, corresponding to anomalies, have been imputed for individuals 8296 and 9962 with their RLM's predicted value.
+
+]
+
+]
+---
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Comparison with Singer &amp; Willet's (2003)
+
+- Comparison of the subset of dropouts cohort in refreshed and the original data.
+
+--
+
+- We cannot get the exact same dropouts as in the original data because the criteria of dropouts is not clearly articulated. 
+
+--
+
+.center[
+
+&lt;img src="images/ori-ref-compare.png" width="60%" /&gt;
+
+]
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Reproducible Aspects in `yowie`
+
+.panelset[
+.panel[.panel-name[Code and Documentation]
+
+- We made all of the cleaning and pre-processing codes and the variable tagsets file available [here](https://github.com/numbats/yowie/tree/master/data-raw).
+
+- Also in the package's vignette (not updated yet). 
+
+- It can be used as data cleaning example
+
+.center[
+&lt;img src="images/rohan-tweet.png" width="60%" /&gt;
+]
+]
+
+.panel[.panel-name[`shiny` app]
+
+&lt;br&gt;
+
+- We create a `shiny` (Chang, et.al., 2020) [app]() to simulate different threshold for anomalies treatment. 
+
+- Can be found [here](https://ebsmonash.shinyapps.io/yowie_app/) 
+
+]
+
+.panel[.panel-name[👩🏻‍💻 Next plan]
+
+&lt;br&gt;
+
+- Add function to package to do inflation adjustment on the wages data. 
+- Put the data into .csv format so it will not only be isolated in &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;.
+- Create the metadata of the datasets.
+- Deposit it in place like Zenodo. 
+
+]
+
+]
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# Takeaways and Summary
+
+&lt;br&gt;
+
+- This case study has shown that documentation (codes and metadata) is really essential to ensure reproducibility. 
+
+--
+
+- Several difficulties encountered in the absence of it:
+
+  - Deciding the variables to be downloaded.
+
+  - Calculating the `experience`.
+
+  - Treating the outliers.
+
+  - Subsetting the high school dropouts.
+
+  - Matching the original and the refreshed data.
+  
+--
+
+- A better validation rule is suggested to be applied for the data providers in the data entry stage. 
+
+---
+
+class: center, middle
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# &lt;span style="color:black"&gt; Thankyou! &lt;/span&gt;
+
+The slide and it's code can be found in https://github.com/Dewi-Amaliah/TWR-2022. 
+
+This made with `xaringan` (Xie, 2019) in `rmarkdown` (Xie, Dervieux, Riederer, 2020)
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# References 
+
+Aden-Buie, Garrick (2020). xaringanthemer: Custom 'xaringan' CSS Themes. R package version
+  0.3.0. https://CRAN.R-project.org/package=xaringanthemer
+
+Bureau of Labor Statistics, U.S. Department of Labor. 2021a. “National Longitudinal Survey of Youth 1979 Cohort, 1979-2016 (Rounds 1-28).” Produced and distributed by the Center for Human Resource Research (CHRR), The Ohio State University. Columbus, OH, through https://www.nlsinfo.org/bibliography-citing-nls-data.
+
+Cooksey, Elizabeth C. 2017. “Using the National Longitudinal Surveys of Youth (Nlsy)
+to Conduct Life Course Analyses.” In Handbook of Life Course Health Development, edited by Richard M. Lerner Neal Halfon Christoper B. Forrest, 561–77. Cham: Springer. https: //doi.org/https://doi.org/10.1007/978-3-319-47143-3_23.
+
+CrowdFlower. (2016). 2016 Data Science Report. https://visit.figure-eight.com/rs/416-ZBE-142/images/CrowdFlower_DataScienceReport_2016.pdf
+
+Henry, Lionel and Hadley Wickham. (2020). purrr: Functional Programming Tools. R package version
+  0.3.4. https://CRAN.R-project.org/package=purrr
+
+
+Huebner, Marianne, Werner Vach, and Saskia le Cessie. (2016). “A Systematic Ap- proach to Initial Data Analysis Is Good Research Practice.” The Journal of Thoracic and Cardiovascular Surgery 151 (1): 25–27.
+
+
+
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# References 
+
+
+Grolemund, G., &amp; Wickham, H. (2017). R for Data Science. O’Reilly Media.
+
+Kim, Albert Y.; Ismay, Chester; and Chunn, Jennifer, "The fivethirtyeight R package: ‘Tame Data’ Principles for Introductory Statistics and Data Science Courses" (2018). Mathematics and Statistics: Faculty Publications, Smith College, Northampton, MA. https://scholarworks.smith.edu/mth_facpubs/47
+
+Pergamit, Michael R., Charles R. Pierret, Donna S. Rothstein, and Jonathan R. Veum.
+(2001). “Data Watch: The National Longitudinal Surveys.” The Journal of Economic Perspectives 15 (2): 239–53.
+
+Singer, Judith D, and John B Willett. 2003. Applied Longitudinal Data Analysis: Modeling Change and Event Occurrence. Oxford u.a: Oxford Univ. Pr.
+
+Tierney, N. J., Cook, D., &amp; Prvan, T. (2020). brolgar: An R package to BRowse Over
+  Longitudinal Data Graphically and Analytically in R. In arXiv [stat.AP]. arXiv.
+  http://arxiv.org/abs/2012.01619
+
+van der Loo, Mark P. J., and Edwin de Jonge. (2021). “Data Validation Infrastructure for R.” Journal of Statistical Software 97 (10): 1–31. https://doi.org/10.18637/jss. v097.i10.
+
+Venables, W. N. &amp; Ripley, B. D. (2002) Modern Applied Statistics with S. Fourth Edition.
+  Springer, New York. ISBN 0-387-95457-0
+  
+---
+
+class: top, left
+
+background-image:url(images/slide-bg.png)
+background-size: cover
+
+# References 
+
+Wang, E, D Cook, and RJ Hyndman (2020). A new tidy data structure to support exploration and
+  modeling of temporal data, Journal of Computational and Graphical Statistics, 29:3, 466-478,
+  doi:10.1080/10618600.2019.1695624.
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43),
+  1686, https://doi.org/10.21105/joss.01686
+  
+Wickham, Hadley. (2021). tidyr: Tidy Messy Data. R package version 1.1.3.
+  https://CRAN.R-project.org/package=tidyr
+  
+Xie, Yihui. (2020). xaringan: Presentation Ninja. R package version 0.17.
+  https://CRAN.R-project.org/package=xaringan
+
+Xie, Yihui and Christophe Dervieux and Emily Riederer (2020). R Markdown Cookbook. Chapman and
+  Hall/CRC. ISBN 9780367563837. URL https://bookdown.org/yihui/rmarkdown-cookbook.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
