@@ -609,8 +609,6 @@ background-size: cover
 
   - Calculating the `experience`.
 
-  - Treating the outliers.
-
   - Subsetting the high school dropouts.
 
   - Matching the original and the refreshed data.
